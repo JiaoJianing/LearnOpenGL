@@ -6,6 +6,9 @@
 #include <GLFW/glfw3.h>
 #include "Shader.h"
 #include <SOIL.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 const GLuint WIDTH = 800, HEIGHT = 600;
 
@@ -132,10 +135,25 @@ int main( int argc, char ** argv )
 		glBindTexture( GL_TEXTURE_2D, texture2 );
 		glUniform1i( glGetUniformLocation( shader.Program, "ourTexture2" ), 1 );
 
+		glm::mat4 trans;
+		trans = glm::translate( trans, glm::vec3( 0.5f, -0.5f, 0.0f ) );
+		trans = glm::rotate( trans, ( GLfloat )glfwGetTime() * glm::radians( 50.0f ), glm::vec3( 0.0f, 0.0f, 1.0f ) );
+
+		GLint transformLocation = glGetUniformLocation( shader.Program, "transform" );
+		glUniformMatrix4fv( transformLocation, 1, GL_FALSE, glm::value_ptr( trans ) );
+
 		glBindVertexArray( VAO );
 		//glDrawArrays( GL_TRIANGLES, 0, 3 );
 		//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 		glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 );
+
+		trans = glm::mat4();
+		trans = glm::translate( trans, glm::vec3( -0.5f, 0.5f, 0.0f ) );
+		GLfloat scale = sin( glfwGetTime() );
+		trans = glm::scale( trans, glm::vec3( scale ) );
+		glUniformMatrix4fv( transformLocation, 1, GL_FALSE, glm::value_ptr( trans ) );
+		glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 );
+
 		glBindVertexArray( 0 );
 
 		glfwSwapBuffers( window );
