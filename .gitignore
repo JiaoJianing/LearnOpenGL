@@ -1,11 +1,5 @@
 *.opensdf
 *.sdf
-*.idb
-*.pdb
 *.suo
-*.log
 *.user
-*.tlog
-*.obj
-LearnOpenGL\LearnOpenGL\x64\*.*
-*.obj
+x64
