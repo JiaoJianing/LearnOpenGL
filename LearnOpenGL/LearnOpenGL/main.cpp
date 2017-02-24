@@ -49,10 +49,10 @@ int main( int argc, char ** argv )
 
 	GLfloat vertices[] =
 	{
-		-0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,//вСио╫г
-		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,//вСоб╫г
-		0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,//сроб╫г
-		0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f//срио╫г
+		-0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,//вСио╫г
+		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,//вСоб╫г
+		0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,//сроб╫г
+		0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f//срио╫г
 	};
 
 	GLuint indices[] =
@@ -75,39 +75,14 @@ int main( int argc, char ** argv )
 	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, EBO );
 	glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof( indices ), indices, GL_STATIC_DRAW );
 
-	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof( GLfloat ), ( GLvoid * )0 );
+	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof( GLfloat ), ( GLvoid * )0 );
 	glEnableVertexAttribArray( 0 );
-	glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof( GLfloat ), ( GLvoid * )( 3 * sizeof( GLfloat ) ) );
+	glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof( GLfloat ), ( GLvoid * )( 3 * sizeof( GLfloat ) ) );
 	glEnableVertexAttribArray( 1 );
-	glVertexAttribPointer( 2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof( GLfloat ), ( GLvoid * )( 6 * sizeof( GLfloat ) ) );
-	glEnableVertexAttribArray( 2 );
 	glBindVertexArray( 0 );
 
-	GLuint texture1;
-	glGenTextures( 1, &texture1 );
-	glBindTexture( GL_TEXTURE_2D, texture1 );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-
-	int width1, height1;
-	unsigned char * image1 = SOIL_load_image( ".\\images\\container.jpg", &width1, &height1, 0, SOIL_LOAD_RGB );
-	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width1, height1, 0, GL_RGB, GL_UNSIGNED_BYTE, image1 );
-	glGenerateMipmap( GL_TEXTURE_2D );
-	SOIL_free_image_data( image1 );
-	glBindTexture( GL_TEXTURE_2D, 0 );
-
-	GLuint texture2;
-	glGenTextures( 1, &texture2 );
-	glBindTexture( GL_TEXTURE_2D, texture2 );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-
-	int width2, height2;
-	unsigned char * image2 = SOIL_load_image( ".\\images\\awesomeface.png", &width2, &height2, 0, SOIL_LOAD_RGB );
-	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width2, height2, 0, GL_RGB, GL_UNSIGNED_BYTE, image2 );
-	glGenerateMipmap( GL_TEXTURE_2D );
-	SOIL_free_image_data( image2 );
-	glBindTexture( GL_TEXTURE_2D, 0 );
+	int width, height;
+	unsigned char * image = SOIL_load_image( "container.jpg", &width, &height, 0, SOIL_LOAD_RGB );
 
 	Shader shader( ".\\shaders\\shader.vp", ".\\shaders\\shader.fp" );
 
@@ -120,17 +95,10 @@ int main( int argc, char ** argv )
 
 		shader.Use();
 
-		//GLfloat timeValue = glfwGetTime();
-		//GLfloat greenValue = ( sin( timeValue ) / 2 ) + 0.5;
-		//GLint vertexColorLocation = glGetUniformLocation( shader.Program, "ourColor" );
-		//glUniform4f( vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f );
-
-		glActiveTexture( GL_TEXTURE0 );
-		glBindTexture( GL_TEXTURE_2D, texture1 );
-		glUniform1i( glGetUniformLocation( shader.Program, "ourTexture1" ) , 0 );
-		glActiveTexture( GL_TEXTURE1 );
-		glBindTexture( GL_TEXTURE_2D, texture2 );
-		glUniform1i( glGetUniformLocation( shader.Program, "ourTexture2" ), 1 );
+		GLfloat timeValue = glfwGetTime();
+		GLfloat greenValue = ( sin( timeValue ) / 2 ) + 0.5;
+		GLint vertexColorLocation = glGetUniformLocation( shader.Program, "ourColor" );
+		glUniform4f( vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f );
 
 		glBindVertexArray( VAO );
 		//glDrawArrays( GL_TRIANGLES, 0, 3 );

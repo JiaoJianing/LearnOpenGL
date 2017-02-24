@@ -92,8 +92,7 @@
       <AdditionalDependencies>opengl32.lib;glew32sd.lib;glfw3.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>if exist $(ProjectDir)shaders xcopy "$(ProjectDir)shaders" "$(TargetDir)shaders" /i /e /y /d
-if exist $(ProjectDir)images xcopy "$(ProjectDir)images" "$(TargetDir)images" /i /e /y /d</Command>
+      <Command>if exist $(ProjectDir)shaders xcopy "$(ProjectDir)shaders" "$(TargetDir)shaders" /i /e /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
