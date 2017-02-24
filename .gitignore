@@ -6,5 +6,6 @@
 *.log
 *.user
 *.tlog
-*.pdb
+*.obj
 LearnOpenGL\LearnOpenGL\x64\*.*
+*.obj
