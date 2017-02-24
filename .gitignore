@@ -1,0 +1,5 @@
+*.opensdf
+*.sdf
+*.idb
+*.pdb
+LearnOpenGL/x64
