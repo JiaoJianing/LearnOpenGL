@@ -2,4 +2,7 @@
 *.sdf
 *.idb
 *.pdb
-LearnOpenGL/x64
+*.suo
+*.log
+*.user
+LearnOpenGL\LearnOpenGL\x64
