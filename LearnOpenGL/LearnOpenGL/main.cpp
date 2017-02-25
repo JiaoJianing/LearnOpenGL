@@ -12,11 +12,50 @@
 
 const GLuint WIDTH = 800, HEIGHT = 600;
 
+glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0, 0, -1.0f);
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+bool keys[1024];
+
+GLfloat deltaTime = 0.0f; //当前帧与上一帧的时间间隔
+GLfloat lastFrame = 0.0f;  //上一帧的时间
+
 void key_callback(GLFWwindow * window, int key, int scancode, int action, int mode)
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
+	}
+
+	if (action == GLFW_PRESS)
+	{
+		keys[key] = true;
+	}
+	if (action == GLFW_RELEASE)
+	{
+		keys[key] = false;
+	}
+}
+
+void do_movement()
+{
+	GLfloat cameraSpeed = 5.0f * deltaTime;
+	if (keys[GLFW_KEY_W])
+	{
+		cameraPos += cameraSpeed * cameraFront;
+	}
+	if (keys[GLFW_KEY_S])
+	{
+		cameraPos -= cameraSpeed * cameraFront;
+	}
+	if (keys[GLFW_KEY_A])
+	{
+		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp))*cameraSpeed;
+	}
+	if (keys[GLFW_KEY_D])
+	{
+		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp))*cameraSpeed;
 	}
 }
 
@@ -171,17 +210,17 @@ int main(int argc, char ** argv)
 
 	while (!glfwWindowShouldClose(window))
 	{
+		GLfloat currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
 		glfwPollEvents();
+		do_movement();
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shader.Use();
-
-		//GLfloat timeValue = glfwGetTime();
-		//GLfloat greenValue = ( sin( timeValue ) / 2 ) + 0.5;
-		//GLint vertexColorLocation = glGetUniformLocation( shader.Program, "ourColor" );
-		//glUniform4f( vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f );
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
@@ -190,10 +229,8 @@ int main(int argc, char ** argv)
 		glBindTexture(GL_TEXTURE_2D, texture2);
 		glUniform1i(glGetUniformLocation(shader.Program, "ourTexture2"), 1);
 
-		glm::mat4 model;
-		model = glm::rotate(model, (GLfloat)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
 		glm::mat4 view;
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
 
