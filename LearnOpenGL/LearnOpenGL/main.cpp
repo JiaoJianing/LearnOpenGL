@@ -21,6 +21,12 @@ bool keys[1024];
 GLfloat deltaTime = 0.0f; //当前帧与上一帧的时间间隔
 GLfloat lastFrame = 0.0f;  //上一帧的时间
 
+bool firstMouse = true;
+GLfloat lastX = 400.0f, lastY = 300.0f;
+GLfloat yaw = -90.0f, pitch = 0.0f;
+
+GLfloat aspect = 5.0f;
+
 void key_callback(GLFWwindow * window, int key, int scancode, int action, int mode)
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
@@ -35,6 +41,59 @@ void key_callback(GLFWwindow * window, int key, int scancode, int action, int mo
 	if (action == GLFW_RELEASE)
 	{
 		keys[key] = false;
+	}
+}
+
+void mouse_callback(GLFWwindow* window, double xPos, double yPos)
+{
+	if (firstMouse)
+	{
+		lastX = xPos;
+		lastY = yPos;
+		firstMouse = false;
+	}
+
+	GLfloat xoffset = xPos - lastX;
+	GLfloat yoffset = lastY - yPos;
+	lastX = xPos;
+	lastY = yPos;
+
+	GLfloat sensitivity = 0.05f;
+	xoffset *= sensitivity;
+	yoffset *= sensitivity;
+
+	yaw += xoffset;
+	pitch += yoffset;
+
+	if (pitch > 89.0f)
+	{
+		pitch = 89.0f;
+	}
+	if (pitch < -89.0f)
+	{
+		pitch = -89.0f;
+	}
+
+	glm::vec3 front;
+	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	front.y = sin(glm::radians(pitch));
+	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	cameraFront = glm::normalize(front);
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	if (aspect >= 1.0f && aspect <= 45.0f)
+	{
+		aspect -= yoffset;
+	}
+	if (aspect <= 1.0f)
+	{
+		aspect = 1.0f;
+	}
+	if (aspect >= 45.0f)
+	{
+		aspect = 45.0f;
 	}
 }
 
@@ -76,6 +135,8 @@ int main(int argc, char ** argv)
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, key_callback);
+	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetScrollCallback(window, scroll_callback);
 
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)
@@ -232,7 +293,7 @@ int main(int argc, char ** argv)
 		glm::mat4 view;
 		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 		glm::mat4 projection;
-		projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(aspect), (float)width / (float)height, 0.1f, 100.0f);
 
 		GLint modelLocation = glGetUniformLocation(shader.Program, "model");
 		//glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
@@ -257,6 +318,9 @@ int main(int argc, char ** argv)
 
 		glfwSwapBuffers(window);
 	}
+
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
 
 	glfwTerminate();
 	return 0;
