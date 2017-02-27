@@ -4,11 +4,14 @@
 #include <GL/glew.h>
 
 #include <GLFW/glfw3.h>
-#include "Shader.h"
 #include <SOIL.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include "Shader.h"
+#include "Camera.h"
 
 const GLuint WIDTH = 800, HEIGHT = 600;
 
@@ -23,9 +26,8 @@ GLfloat lastFrame = 0.0f;  //上一帧的时间
 
 bool firstMouse = true;
 GLfloat lastX = 400.0f, lastY = 300.0f;
-GLfloat yaw = -90.0f, pitch = 0.0f;
 
-GLfloat aspect = 5.0f;
+Camera camera(glm::vec3(0, 0, 3.0f));
 
 void key_callback(GLFWwindow * window, int key, int scancode, int action, int mode)
 {
@@ -58,63 +60,31 @@ void mouse_callback(GLFWwindow* window, double xPos, double yPos)
 	lastX = xPos;
 	lastY = yPos;
 
-	GLfloat sensitivity = 0.05f;
-	xoffset *= sensitivity;
-	yoffset *= sensitivity;
-
-	yaw += xoffset;
-	pitch += yoffset;
-
-	if (pitch > 89.0f)
-	{
-		pitch = 89.0f;
-	}
-	if (pitch < -89.0f)
-	{
-		pitch = -89.0f;
-	}
-
-	glm::vec3 front;
-	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-	front.y = sin(glm::radians(pitch));
-	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-	cameraFront = glm::normalize(front);
+	camera.ProcessMouseMove(xoffset, yoffset);
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	if (aspect >= 1.0f && aspect <= 45.0f)
-	{
-		aspect -= yoffset;
-	}
-	if (aspect <= 1.0f)
-	{
-		aspect = 1.0f;
-	}
-	if (aspect >= 45.0f)
-	{
-		aspect = 45.0f;
-	}
+	camera.ProcessMouseScroll(yoffset);
 }
 
 void do_movement()
 {
-	GLfloat cameraSpeed = 5.0f * deltaTime;
 	if (keys[GLFW_KEY_W])
 	{
-		cameraPos += cameraSpeed * cameraFront;
+		camera.ProcessKeyboard(FORWARD, deltaTime);
 	}
 	if (keys[GLFW_KEY_S])
 	{
-		cameraPos -= cameraSpeed * cameraFront;
+		camera.ProcessKeyboard(BACKWORD, deltaTime);
 	}
 	if (keys[GLFW_KEY_A])
 	{
-		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp))*cameraSpeed;
+		camera.ProcessKeyboard(LEFT, deltaTime);
 	}
 	if (keys[GLFW_KEY_D])
 	{
-		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp))*cameraSpeed;
+		camera.ProcessKeyboard(RIGHT, deltaTime);
 	}
 }
 
@@ -137,6 +107,8 @@ int main(int argc, char ** argv)
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
+
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)
@@ -291,9 +263,9 @@ int main(int argc, char ** argv)
 		glUniform1i(glGetUniformLocation(shader.Program, "ourTexture2"), 1);
 
 		glm::mat4 view;
-		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+		view = camera.GetViewMatrix();
 		glm::mat4 projection;
-		projection = glm::perspective(glm::radians(aspect), (float)width / (float)height, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(camera.Zoom), (float)width / (float)height, 0.1f, 100.0f);
 
 		GLint modelLocation = glGetUniformLocation(shader.Program, "model");
 		//glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
