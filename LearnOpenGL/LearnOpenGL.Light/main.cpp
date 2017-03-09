@@ -29,7 +29,7 @@ GLfloat lastFrame = 0.0f;  //上一帧的时间
 bool firstMouse = true;
 GLfloat lastX = 400.0f, lastY = 300.0f;
 
-Camera camera( glm::vec3( 0, 0, 3.0f ) );
+Camera camera( glm::vec3( 0.5f, 1.0f, 3.0f ) );
 
 void key_callback( GLFWwindow * window, int key, int scancode, int action, int mode )
 {
@@ -126,69 +126,71 @@ int main( int argc, char ** argv )
 
 	GLfloat vertices[] =
 	{
-		-0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, 0.5f, -0.5f,
-		0.5f, 0.5f, -0.5f,
-		-0.5f, 0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, // position, normal
+		0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+		0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+		0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+		-0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
 
-		-0.5f, -0.5f, 0.5f,
-		0.5f, -0.5f, 0.5f,
-		0.5f, 0.5f, 0.5f,
-		0.5f, 0.5f, 0.5f,
-		-0.5f, 0.5f, 0.5f,
-		-0.5f, -0.5f, 0.5f,
+		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+		0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+		0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+		0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+		-0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
 
-		-0.5f, 0.5f, 0.5f,
-		-0.5f, 0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f, -0.5f,
-		-0.5f, -0.5f, 0.5f,
-		-0.5f, 0.5f, 0.5f,
+		-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
 
-		0.5f, 0.5f, 0.5f,
-		0.5f, 0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, 0.5f,
-		0.5f, 0.5f, 0.5f,
+		0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+		0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+		0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+		0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
+		0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
 
-		-0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, -0.5f,
-		0.5f, -0.5f, 0.5f,
-		0.5f, -0.5f, 0.5f,
-		-0.5f, -0.5f, 0.5f,
-		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
+		0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
+		0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
+		0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
+		-0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
 
-		-0.5f, 0.5f, -0.5f,
-		0.5f, 0.5f, -0.5f,
-		0.5f, 0.5f, 0.5f,
-		0.5f, 0.5f, 0.5f,
-		-0.5f, 0.5f, 0.5f,
-		-0.5f, 0.5f, -0.5f
+		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
+		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
 	};
 
 	GLuint VBO;
 	glGenBuffers( 1, &VBO );
+	glBindBuffer( GL_ARRAY_BUFFER, VBO );
+	glBufferData( GL_ARRAY_BUFFER, sizeof( vertices ), vertices, GL_STATIC_DRAW );
+
 	GLuint VAO;
 	glGenVertexArrays( 1, &VAO );
 	GLuint lightVAO;
 	glGenVertexArrays( 1, &lightVAO );
 
 	glBindVertexArray( VAO );
-	glBindBuffer( GL_ARRAY_BUFFER, VBO );
-	glBufferData( GL_ARRAY_BUFFER, sizeof( vertices ), vertices, GL_STATIC_DRAW );
-
-	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof( GLfloat ), ( GLvoid * )0 );
+	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof( GLfloat ), ( GLvoid * )0 );
 	glEnableVertexAttribArray( 0 );
+
+	glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof( GLfloat ), ( GLvoid * )( 3 * sizeof( float ) ) );
+	glEnableVertexAttribArray( 1 );
 	glBindVertexArray( 0 );
 
-	glBindVertexArray( lightVAO );
 	glBindBuffer( GL_ARRAY_BUFFER, VBO );
-	glBufferData( GL_ARRAY_BUFFER, sizeof( vertices ), vertices, GL_STATIC_DRAW );
+	glBindVertexArray( lightVAO );
 
-	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof( GLfloat ), ( GLvoid * )0 );
+	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof( GLfloat ), ( GLvoid * )0 );
 	glEnableVertexAttribArray( 0 );
 	glBindVertexArray( 0 );
 
@@ -221,13 +223,17 @@ int main( int argc, char ** argv )
 		GLint modelLocation = glGetUniformLocation( shader.Program, "model" );
 		GLint viewLocation = glGetUniformLocation( shader.Program, "view" );
 		GLint projLocation = glGetUniformLocation( shader.Program, "projection" );
+		GLint lightPosLocation = glGetUniformLocation( shader.Program, "lightPos" );
 		GLint lightColorLocation = glGetUniformLocation( shader.Program, "lightColor" );
 		GLint objectColorLocation = glGetUniformLocation( shader.Program, "objectColor" );
+		GLint viewPosLocation = glGetUniformLocation( shader.Program, "viewPos" );
 		glUniformMatrix4fv( modelLocation, 1, GL_FALSE, glm::value_ptr( model ) );
 		glUniformMatrix4fv( viewLocation, 1, GL_FALSE, glm::value_ptr( view ) );
 		glUniformMatrix4fv( projLocation, 1, GL_FALSE, glm::value_ptr( projection ) );
+		glUniform3f( lightPosLocation, lightPos.x, lightPos.y, lightPos.z );
 		glUniform3f( lightColorLocation, 1.0f, 1.0f, 1.0f );
 		glUniform3f( objectColorLocation, 1.0f, 0.5f, 0.31f );
+		glUniform3f( viewPosLocation, camera.Position.x, camera.Position.y, camera.Position.z );
 
 		glBindVertexArray( VAO );
 		glDrawArrays( GL_TRIANGLES, 0, 36 );
@@ -240,7 +246,7 @@ int main( int argc, char ** argv )
 		viewLocation = glGetUniformLocation( lampShader.Program, "view" );
 		projLocation = glGetUniformLocation( lampShader.Program, "projection" );
 		model = glm::translate( model, lightPos );
-		model = glm::scale( model, glm::vec3( 0.2f ) );
+		model = glm::scale( model, glm::vec3( 0.05f ) );
 		glUniformMatrix4fv( modelLocation, 1, GL_FALSE, glm::value_ptr( model ) );
 		glUniformMatrix4fv( viewLocation, 1, GL_FALSE, glm::value_ptr( view ) );
 		glUniformMatrix4fv( projLocation, 1, GL_FALSE, glm::value_ptr( projection ) );
@@ -254,6 +260,7 @@ int main( int argc, char ** argv )
 	}
 
 	glDeleteVertexArrays( 1, &VAO );
+	glDeleteVertexArrays( 1, &lightVAO );
 	glDeleteBuffers( 1, &VBO );
 
 	glfwTerminate();
