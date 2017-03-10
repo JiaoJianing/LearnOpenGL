@@ -89,7 +89,8 @@
       <AdditionalDependencies>opengl32.lib;glew32sd.lib;glfw3.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>if exist $(ProjectDir)shaders xcopy "$(ProjectDir)shaders" "$(TargetDir)shaders" /i /e /y /d</Command>
+      <Command>if exist $(ProjectDir)shaders xcopy "$(ProjectDir)shaders" "$(TargetDir)shaders" /i /e /y /d
+if exist $(ProjectDir)images xcopy "$(ProjectDir)images" "$(TargetDir)images" /i /e /y /d</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -122,11 +123,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Image.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

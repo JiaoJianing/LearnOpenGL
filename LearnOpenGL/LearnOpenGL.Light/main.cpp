@@ -12,6 +12,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include "Shader.h"
 #include "Camera.h"
+#include "Image.h"
 
 const GLuint WIDTH = 800, HEIGHT = 600;
 
@@ -126,47 +127,48 @@ int main( int argc, char ** argv )
 
 	GLfloat vertices[] =
 	{
-		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, // position, normal
-		0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-		0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-		0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-		-0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f,
+		// position, normal, texCoords
+		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+		0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,
+		-0.5f, 0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f,
 
-		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-		0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-		0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-		0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-		-0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+		0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+		-0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
 
-		-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
-		-0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f,
-		-0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
-		-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		-0.5f, 0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+		-0.5f, -0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f, 0.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
 
-		0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
-		0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
-		0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
-		0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
-		0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+		0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+		0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
 
-		-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
-		0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
-		0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
-		0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
-		-0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f,
+		0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		-0.5f, -0.5f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
 
-		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-		0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
-		0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
-		-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
-		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+		0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+		0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+		-0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f
 	};
 
 	GLuint VBO;
@@ -180,22 +182,32 @@ int main( int argc, char ** argv )
 	glGenVertexArrays( 1, &lightVAO );
 
 	glBindVertexArray( VAO );
-	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof( GLfloat ), ( GLvoid * )0 );
+	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof( GLfloat ), ( GLvoid * )0 );
 	glEnableVertexAttribArray( 0 );
 
-	glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof( GLfloat ), ( GLvoid * )( 3 * sizeof( float ) ) );
+	glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof( GLfloat ), ( GLvoid * )( 3 * sizeof( GLfloat ) ) );
 	glEnableVertexAttribArray( 1 );
+
+	glVertexAttribPointer( 2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof( GLfloat ), ( GLvoid * )( 6 * sizeof( GLfloat ) ) );
+	glEnableVertexAttribArray( 2 );
 	glBindVertexArray( 0 );
 
 	glBindBuffer( GL_ARRAY_BUFFER, VBO );
 	glBindVertexArray( lightVAO );
 
-	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof( GLfloat ), ( GLvoid * )0 );
+	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof( GLfloat ), ( GLvoid * )0 );
 	glEnableVertexAttribArray( 0 );
 	glBindVertexArray( 0 );
 
 	Shader shader( ".\\shaders\\shader.vp", ".\\shaders\\shader.fp" );
 	Shader lampShader( ".\\shaders\\shader.vp", ".\\shaders\\light.fp" );
+
+	Image diffuseMap;
+	diffuseMap.Load( ".\\images\\container2.png" );
+	Image specularMap;
+	specularMap.Load( ".\\images\\container2_specular.png" );
+	Image emitMap;
+	emitMap.Load( ".\\images\\matrix.jpg" );
 
 	glEnable( GL_DEPTH_TEST );
 
@@ -208,7 +220,7 @@ int main( int argc, char ** argv )
 		glfwPollEvents();
 		do_movement();
 
-		glClearColor( 0.2f, 0.3f, 0.3f, 1.0f );
+		glClearColor( 0.1f, 0.1f, 0.1f, 1.0f );
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 		//计算model view projection matrix
@@ -223,11 +235,10 @@ int main( int argc, char ** argv )
 		GLint modelLocation = glGetUniformLocation( shader.Program, "model" );
 		GLint viewLocation = glGetUniformLocation( shader.Program, "view" );
 		GLint projLocation = glGetUniformLocation( shader.Program, "projection" );
-		GLint objectColorLocation = glGetUniformLocation( shader.Program, "objectColor" );
 		GLint viewPosLocation = glGetUniformLocation( shader.Program, "viewPos" );
-		GLint matAmbientLocation = glGetUniformLocation( shader.Program, "material.ambient" );
 		GLint matDiffuseLocation = glGetUniformLocation( shader.Program, "material.diffuse" );
 		GLint matSpecularLocation = glGetUniformLocation( shader.Program, "material.specular" );
+		GLint matEmissionLocation = glGetUniformLocation( shader.Program, "material.emission" );
 		GLint matShininessLocation = glGetUniformLocation( shader.Program, "material.shininess" );
 		GLint lightPosLocation = glGetUniformLocation( shader.Program, "light.position" );
 		GLint lightAmbientLocation = glGetUniformLocation( shader.Program, "light.ambient" );
@@ -236,12 +247,11 @@ int main( int argc, char ** argv )
 		glUniformMatrix4fv( modelLocation, 1, GL_FALSE, glm::value_ptr( model ) );
 		glUniformMatrix4fv( viewLocation, 1, GL_FALSE, glm::value_ptr( view ) );
 		glUniformMatrix4fv( projLocation, 1, GL_FALSE, glm::value_ptr( projection ) );
-		glUniform3f( objectColorLocation, 1.0f, 0.5f, 0.31f );
 		glUniform3f( viewPosLocation, camera.Position.x, camera.Position.y, camera.Position.z );
-		glUniform3f( matAmbientLocation, 1.0f, 0.5f, 0.31f );
-		glUniform3f( matDiffuseLocation, 1.0f, 0.5f, 0.31f );
-		glUniform3f( matSpecularLocation, 0.5f, 0.5f, 0.5f );
-		glUniform1f( matShininessLocation, 32.0f );
+		glUniform1f( matShininessLocation, 64.0f );
+		glUniform1i( matDiffuseLocation, 0 );
+		glUniform1i( matSpecularLocation, 1 );
+		glUniform1i( matEmissionLocation, 2 );
 
 		//光源位置随时间改变
 		lightPos.x = 1.0f + sin( glfwGetTime() ) * 2.0f;
@@ -257,6 +267,13 @@ int main( int argc, char ** argv )
 		glUniform3f( lightAmbientLocation, ambientColor.x, ambientColor.y, ambientColor.z );
 		glUniform3f( lightDiffuseLocation, diffuseColor.x, diffuseColor.y, diffuseColor.z );
 		glUniform3f( lightSpecularLocation, 1.0f, 1.0f, 1.0f );
+
+		glActiveTexture( GL_TEXTURE0 );
+		glBindTexture( GL_TEXTURE_2D, diffuseMap.textureID );
+		glActiveTexture( GL_TEXTURE1 );
+		glBindTexture( GL_TEXTURE_2D, specularMap.textureID );
+		glActiveTexture( GL_TEXTURE2 );
+		glBindTexture( GL_TEXTURE_2D, emitMap.textureID );
 
 		glBindVertexArray( VAO );
 		glDrawArrays( GL_TRIANGLES, 0, 36 );
