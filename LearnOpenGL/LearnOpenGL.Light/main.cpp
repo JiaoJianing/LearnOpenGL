@@ -30,7 +30,7 @@ GLfloat lastFrame = 0.0f;  //上一帧的时间
 bool firstMouse = true;
 GLfloat lastX = 400.0f, lastY = 300.0f;
 
-Camera camera( glm::vec3( -1.2f, 1.0f, -1.0f ), glm::vec3( 0.0f, 1.0f, 0.0f ), 54.0f, -13.0f );
+Camera camera( glm::vec3( 1.2f, 1.0f, 7.0f ), glm::vec3( 0.0f, 1.0f, 0.0f ), -90.0f, -5.0f );
 
 void key_callback( GLFWwindow * window, int key, int scancode, int action, int mode )
 {
@@ -171,6 +171,20 @@ int main( int argc, char ** argv )
 		-0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f
 	};
 
+	glm::vec3 cubePositions[] =
+	{
+		glm::vec3( 0.0f, 0.0f, 0.0f ),
+		glm::vec3( 2.0f, 5.0f, -15.0f ),
+		glm::vec3( -1.5f, -2.2f, -2.5f ),
+		glm::vec3( -3.8f, -2.0f, -12.3f ),
+		glm::vec3( 2.4f, -0.4f, -3.5f ),
+		glm::vec3( -1.7f, 3.0f, -7.5f ),
+		glm::vec3( 1.3f, -2.0f, -2.5f ),
+		glm::vec3( 1.5f, 2.0f, -2.5f ),
+		glm::vec3( 1.5f, 0.2f, -1.5f ),
+		glm::vec3( -1.3f, 1.0f, -1.5f )
+	};
+
 	GLuint VBO;
 	glGenBuffers( 1, &VBO );
 	glBindBuffer( GL_ARRAY_BUFFER, VBO );
@@ -240,7 +254,8 @@ int main( int argc, char ** argv )
 		GLint matSpecularLocation = glGetUniformLocation( shader.Program, "material.specular" );
 		GLint matEmissionLocation = glGetUniformLocation( shader.Program, "material.emission" );
 		GLint matShininessLocation = glGetUniformLocation( shader.Program, "material.shininess" );
-		GLint lightPosLocation = glGetUniformLocation( shader.Program, "light.position" );
+		//GLint lightPosLocation = glGetUniformLocation( shader.Program, "light.position" );
+		GLint lightDirLocation = glGetUniformLocation( shader.Program, "light.direction" );
 		GLint lightAmbientLocation = glGetUniformLocation( shader.Program, "light.ambient" );
 		GLint lightDiffuseLocation = glGetUniformLocation( shader.Program, "light.diffuse" );
 		GLint lightSpecularLocation = glGetUniformLocation( shader.Program, "light.specular" );
@@ -254,14 +269,15 @@ int main( int argc, char ** argv )
 		glUniform1i( matEmissionLocation, 2 );
 
 		//光源位置随时间改变
-		lightPos.x = 1.0f + sin( glfwGetTime() ) * 2.0f;
-		lightPos.y = 1.0f + sin( glfwGetTime() ) * 1.0f;
-		glUniform3f( lightPosLocation, lightPos.x, lightPos.y, lightPos.z );
+		//lightPos.x = 1.0f + sin( glfwGetTime() ) * 2.0f;
+		//lightPos.y = 1.0f + sin( glfwGetTime() ) * 1.0f;
+		//glUniform3f( lightPosLocation, lightPos.x, lightPos.y, lightPos.z );
+		glUniform3f( lightDirLocation, -0.2f, -1.0f, -0.3f );
 		//光的颜色随时间改变
-		glm::vec3 lightColor;
-		lightColor.x = sin( glfwGetTime() * 2.0f );
-		lightColor.y = sin( glfwGetTime() * 0.7f );
-		lightColor.z = sin( glfwGetTime() * 1.3f );
+		glm::vec3 lightColor( 1.0f );
+		//lightColor.x = sin( glfwGetTime() * 2.0f );
+		//lightColor.y = sin( glfwGetTime() * 0.7f );
+		//lightColor.z = sin( glfwGetTime() * 1.3f );
 		glm::vec3 diffuseColor = lightColor * glm::vec3( 0.5f );
 		glm::vec3 ambientColor = diffuseColor * glm::vec3( 0.2f );
 		glUniform3f( lightAmbientLocation, ambientColor.x, ambientColor.y, ambientColor.z );
@@ -276,24 +292,32 @@ int main( int argc, char ** argv )
 		glBindTexture( GL_TEXTURE_2D, emitMap.textureID );
 
 		glBindVertexArray( VAO );
-		glDrawArrays( GL_TRIANGLES, 0, 36 );
+		for ( int i = 0; i < 10; i++ )
+		{
+			model = glm::mat4();
+			model = glm::translate( model, cubePositions[i] );
+			GLfloat angle = 20.0f * i;
+			model = glm::rotate( model, angle, glm::vec3( 1.0f, 0.3f, 0.5f ) );
+			glUniformMatrix4fv( modelLocation, 1, GL_FALSE, glm::value_ptr( model ) );
+			glDrawArrays( GL_TRIANGLES, 0, 36 );
+		}
 		glBindVertexArray( 0 );
 		#pragma endregion
 
 		#pragma region 绘制光源
-		lampShader.Use();
-		modelLocation = glGetUniformLocation( lampShader.Program, "model" );
-		viewLocation = glGetUniformLocation( lampShader.Program, "view" );
-		projLocation = glGetUniformLocation( lampShader.Program, "projection" );
-		model = glm::translate( model, lightPos );
-		model = glm::scale( model, glm::vec3( 0.05f ) );
-		glUniformMatrix4fv( modelLocation, 1, GL_FALSE, glm::value_ptr( model ) );
-		glUniformMatrix4fv( viewLocation, 1, GL_FALSE, glm::value_ptr( view ) );
-		glUniformMatrix4fv( projLocation, 1, GL_FALSE, glm::value_ptr( projection ) );
+		//lampShader.Use();
+		//modelLocation = glGetUniformLocation( lampShader.Program, "model" );
+		//viewLocation = glGetUniformLocation( lampShader.Program, "view" );
+		//projLocation = glGetUniformLocation( lampShader.Program, "projection" );
+		//model = glm::translate( model, lightPos );
+		//model = glm::scale( model, glm::vec3( 0.05f ) );
+		//glUniformMatrix4fv( modelLocation, 1, GL_FALSE, glm::value_ptr( model ) );
+		//glUniformMatrix4fv( viewLocation, 1, GL_FALSE, glm::value_ptr( view ) );
+		//glUniformMatrix4fv( projLocation, 1, GL_FALSE, glm::value_ptr( projection ) );
 
-		glBindVertexArray( lightVAO );
-		glDrawArrays( GL_TRIANGLES, 0, 36 );
-		glBindVertexArray( 0 );
+		//glBindVertexArray( lightVAO );
+		//glDrawArrays( GL_TRIANGLES, 0, 36 );
+		//glBindVertexArray( 0 );
 		#pragma endregion
 
 		glfwSwapBuffers( window );
