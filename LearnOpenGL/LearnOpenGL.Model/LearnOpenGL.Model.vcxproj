@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{401ACC13-F492-4486-A90A-FD190DCCFDCC}</ProjectGuid>
-    <RootNamespace>LearnOpenGL</RootNamespace>
+    <ProjectGuid>{798E9A2A-D561-4422-BB02-BBF521E660D6}</ProjectGuid>
+    <RootNamespace>LearnOpenGLModel</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -71,12 +71,9 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\3rdParty\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\3rdParty\GLFW\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -84,16 +81,16 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\3rdParty\GLEW\include;..\3rdParty\GLFW\include;..\3rdParty\SOIL\include;..\3rdParty\GLM\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\3rdParty\GLEW\include;..\3rdParty\GLFW\include;..\3rdParty\SOIL\include;..\3rdParty\GLM\include;..\3rdParty\Assimp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\3rdParty\GLEW\lib;..\3rdParty\GLFW\lib;..\3rdParty\SOIL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32sd.lib;glfw3.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\3rdParty\GLEW\lib;..\3rdParty\GLFW\lib;..\3rdParty\SOIL\lib;..\3rdParty\Assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32sd.lib;glfw3.lib;SOIL.lib;assimp-vc120-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>if exist $(ProjectDir)shaders xcopy "$(ProjectDir)shaders" "$(TargetDir)shaders" /i /e /y
-if exist $(ProjectDir)images xcopy "$(ProjectDir)images" "$(TargetDir)images" /i /e /y</Command>
+if exist $(ProjectDir)nanosuit xcopy "$(ProjectDir)nanosuit" "$(TargetDir)nanosuit" /i /e /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -127,10 +124,14 @@ if exist $(ProjectDir)images xcopy "$(ProjectDir)images" "$(TargetDir)images" /i
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
